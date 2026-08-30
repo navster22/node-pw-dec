@@ -1,36 +1,38 @@
-const http = require("http");
-const fs = require("fs");
+const express = require("express");
+const usersRouter = require("./routes/users");
+
+const app = express();
 
 const PORT = 3000;
 
-const server = http.createServer((req, res) => {
-    if(req.method === 'GET' && req.url === "/"){
-        fs.readFile("./hello.html", (err, data) => {
-            if(err){
-                res.statusCode = 500;
-                res.end("Something went wrong");
-                return;
-            }
+app.use(express.json());
 
-            res.writeHead(200, {
-                "Content-Type": "text/html",
-            });
-            res.end(data)
-        })
-    } else if(req.method === 'GET' && req.url === "/about"){
-        res.writeHead(200, {
-            "Content-Type": "text/plain",
-        });
-        res.end("About Page")
-    } else {
-        res.writeHead(404, {
-            "Content-Type": "text/plain",
-        });
-        res.end(`Page not found`);
-    }
-    
+const cors = require("cors");
+
+app.use(cors());
+
+app.use("/users", usersRouter)
+
+app.use((err, req, res, next) => {
+    console.log(err);
+    res.status(500).json({
+        status: "Error",
+        message: err.message
+    })
 })
 
-server.listen(PORT, () => {
-    console.log(`Server running at http://localhost:${PORT}`)
+app.get("/", (req, res)=>{
+    res.json({
+        message: "Welcome to Express.js server"
+    })
+})
+
+app.use((req,res) => {
+    res.status(404).json({
+        messgae: "Route not present"
+    })
+})
+
+app.listen(PORT, () => {
+    console.log(`Server is running on PORT: ${PORT}`)
 })

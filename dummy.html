@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+    <body>
+        <button onclick="getUsers()">Get Users</button>
+        <script>
+            async function getUsers(){
+                const res = await fetch("http://localhost:3000/users");
+                const data = await res.json();
+
+                console.log(data);
+            }
+        </script>
+    </body>
+</html>
