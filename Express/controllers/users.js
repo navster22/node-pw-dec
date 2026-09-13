@@ -1,8 +1,8 @@
-const users = [
-    {id: 1, name: "Navneet", role: "Developer"},
-    {id: 2, name: "Max", role: "Designer"},
-    {id: 3, name: "Deepak", role: "Manager"}
-]
+const fs = require("fs");
+const path = require("path");
+
+const filePath = path.join(__dirname, "..", "Users.json");
+const users = JSON.parse(fs.readFileSync(filePath, "utf-8"))
 
 function getUsers(req, res, next) {
     try{
